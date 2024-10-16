@@ -1,72 +1,33 @@
-/**
- * Definition for a binary tree node.
- * public class TreeNode {
- * int val;
- * TreeNode left;
- * TreeNode right;
- * TreeNode() {}
- * TreeNode(int val) { this.val = val; }
- * TreeNode(int val, TreeNode left, TreeNode right) {
- * this.val = val;
- * this.left = left;
- * this.right = right;
- * }
- * }
- */
 class Solution {
     public TreeNode buildTree(int[] preorder, int[] inorder) {
-         return rec(preorder, inorder);
+        return rec(preorder, 0, preorder.length - 1, inorder, 0, inorder.length - 1);
     }
 
-    public TreeNode rec(int[] preorder, int[] inorder) {
-        if(preorder.length==0){
-            return null;
-        }
-        var root = preorder[0];
-        if (preorder.length == 1 && inorder.length == 1) {
-            return new TreeNode(root, null, null);
-        }
-        
-        //travelling to root
-        int i = 0;
-        while (inorder[i] != root) {
-            i++;
-        }
-        var n = preorder.length;
-        var leftSubTreeSize = i;
-        var rightSubTreeSize = n - i - 1;
-        
-        //InOrder slicing
-        var leftInOrder = new int[leftSubTreeSize];
-        int k = 0;
-        for (int j = 0; j < leftSubTreeSize; j++) {
-            leftInOrder[k] = inorder[j];
-            k++;
-        }
-        var rightInOrder = new int[rightSubTreeSize];
-        k = 0;
-        for (int j = leftSubTreeSize + 1; j < n; j++) {
-            rightInOrder[k] = inorder[j];
-            k++;
+    public TreeNode rec(int[] preorder, int preStart, int preEnd, int[] inorder, int inStart, int inEnd) {
+        if (preStart > preEnd || inStart > inEnd) {
+            return null;  // Base case: no more elements to process
         }
 
-        //PreOrder slicing
-        var leftPreOrder = new int[leftSubTreeSize];
-         k = 0;
-        for (int j = 1; j <= leftSubTreeSize; j++) {
-            leftPreOrder[k] = preorder[j];
-            k++;
-        }
-        var rightPreOrder = new int[rightSubTreeSize];
-        k = 0;
-        for (int j = leftSubTreeSize + 1; j < n; j++) {
-            rightPreOrder[k] = preorder[j];
-            k++;
+        // The root is the first element of the current preorder range
+        int rootVal = preorder[preStart];
+        TreeNode root = new TreeNode(rootVal);
+
+        // Find the index of the root in the inorder array
+        int rootIndex = 0;
+        for (int i = inStart; i <= inEnd; i++) {
+            if (inorder[i] == rootVal) {
+                rootIndex = i;
+                break;
+            }
         }
 
-        var left = rec(leftPreOrder,leftInOrder);
-        var right = rec(rightPreOrder,rightInOrder);
+        // Calculate the size of the left subtree
+        int leftSubTreeSize = rootIndex - inStart;
 
-        return new TreeNode(root, left, right);
+        // Recursively build the left and right subtrees
+        root.left = rec(preorder, preStart + 1, preStart + leftSubTreeSize, inorder, inStart, rootIndex - 1);
+        root.right = rec(preorder, preStart + leftSubTreeSize + 1, preEnd, inorder, rootIndex + 1, inEnd);
+
+        return root;
     }
 }
