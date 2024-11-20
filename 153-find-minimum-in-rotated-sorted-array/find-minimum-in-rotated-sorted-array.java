@@ -10,9 +10,9 @@ class Solution {
             }
 
             int mid = l + (r-l) / 2;
-            if (nums[mid] >= nums[l]) {
+            if (nums[mid] >= nums[r]) { // agar mid wala right wale se bda h to left side to ho hi nhi skta h deflection point 
                 l = mid + 1;
-            } else {
+            } else {// agar mid wala right wale se chota  h to right side to ho hi nhi skta h deflection point
                 r = mid;
             }
         }
