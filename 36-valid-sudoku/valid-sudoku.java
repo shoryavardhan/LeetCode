@@ -1,35 +1,41 @@
+import java.util.HashSet;
+
 class Solution {
     public boolean isValidSudoku(char[][] board) {
-        HashMap<Integer, HashSet<Character>> rowWiseMap = new HashMap<>();
-        HashMap<Integer, HashSet<Character>> colWiseMap = new HashMap<>();
-        HashMap<List<Integer>, HashSet<Character>> squareWiseMap = new HashMap<>();
+        HashSet<Character>[] boxsets = new HashSet[9];
         for (int i = 0; i < 9; i++) {
-            rowWiseMap.put(i, new HashSet<>());
-            colWiseMap.put(i, new HashSet<>());
+            boxsets[i] = new HashSet<Character>();
         }
-        for (int r = 0; r < 9; r++) {
-            for (int c = 0; c < 9; c++) {
-                if (board[r][c] == '.') {
-                    continue;
+        for (int i = 0; i < 9; i++) {
+            var rowSet = new HashSet<Character>();
+            var colSet = new HashSet<Character>();
+
+            for (int j = 0; j < 9; j++) {
+                if (board[i][j] != '.') {
+                    if (rowSet.contains(board[i][j])) {
+                        return false;
+                    } else {
+                        rowSet.add(board[i][j]);
+                    }
                 }
 
-                List<Integer> squareCoord = new ArrayList<>();
-                squareCoord.add(r / 3);
-                squareCoord.add(c / 3);
-                if (!squareWiseMap.containsKey(squareCoord)) {
-                    squareWiseMap.put(squareCoord, new HashSet<>());
+                if (board[j][i] != '.') {
+                    if (colSet.contains(board[j][i])) {
+                        return false;
+                    } else {
+                        colSet.add(board[j][i]);
+                    }
                 }
-
-                if (rowWiseMap.get(r).contains(board[r][c]) ||
-                        colWiseMap.get(c).contains(board[r][c]) ||
-                        squareWiseMap.get(squareCoord).contains(board[r][c])) {
-                    return false;
-                } else {
-                    rowWiseMap.get(r).add(board[r][c]);
-                    colWiseMap.get(c).add(board[r][c]);
-                    squareWiseMap.get(squareCoord).add(board[r][c]);
-                }
-
+                 if (board[i][j] != '.') {
+                    var boxNum = (i / 3) * 3 + (j / 3);
+                    var setAtBoxNum = boxsets[boxNum];
+                    if(setAtBoxNum.contains(board[i][j])){
+                        return false;
+                    }
+                    else{
+                        setAtBoxNum.add(board[i][j]);
+                    }
+                 }
             }
         }
         return true;
