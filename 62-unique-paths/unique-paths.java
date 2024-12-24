@@ -1,20 +1,31 @@
 class Solution {
     public int uniquePaths(int m, int n) {
-        int[][] memo = new int[m][n];
-        return dp(m, n, m - 1, n - 1, memo);
+        // int[][] memo = new int[m][n];
+        // return dp(m, n, m - 1, n - 1, memo);
+        return tab(m, n);
     }
 
     public int tab(int m, int n) {
         int[][] memo = new int[m][n];
-        memo[0][0] = 1;
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
-                if (i != 0 && j != 0) {
-                    memo[i][j] = memo[i - 1][j] + memo[i][j - 1];
+                var up = 0;
+                var left = 0;
+                if (i == 0 && j == 0) {
+                    memo[i][j] = 1;
+                } else {
+                    if (i > 0) {
+                        up = memo[i - 1][j];
+                    }
+                    if (j > 0) {
+                        left = memo[i][j - 1];
+                    }
+                    memo[i][j] = up + left;
                 }
+                
             }
         }
-        return memo[m-1][n-1];
+        return memo[m - 1][n - 1];
     }
 
     public int dp(int m, int n, int i, int j, int[][] memo) {
