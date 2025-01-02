@@ -1,7 +1,35 @@
 class Solution {
     public int longestCommonSubsequence(String text1, String text2) {
         // return topDown(text1, text2);
-        return bottomUp(text1, text2);
+        // return bottomUp(text1, text2);
+        return bottomUpSO(text1, text2);
+
+    }
+
+    public int bottomUpSO(String text1, String text2) {
+        int m = text1.length();
+        int n = text2.length();
+
+        int[] prev = new int[n + 1];
+        int[] curr = new int[n + 1];
+
+        for (int j = 0; j <= n; j++) {
+            prev[j] = 0;
+        }
+
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (text1.charAt(i - 1) == text2.charAt(j - 1)) {
+                    curr[j] = 1 + prev[j - 1];
+                } else {
+                    var leftString = curr[j - 1];
+                    var rightString = prev[j];
+                    curr[j] = 0 + Math.max(leftString, rightString);
+                }
+            }
+          System.arraycopy(curr, 0, prev, 0, n + 1);
+        }
+        return curr[n];
 
     }
 
