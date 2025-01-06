@@ -1,6 +1,30 @@
 class Solution {
     public int minDistance(String word1, String word2) {
-        return bottomUp(word1, word2);
+        return bottomUp2(word1, word2);
+    }
+
+    public int bottomUp2(String word1, String word2) {
+        int[] prev = new int[word2.length() + 1];
+        for (int j = 0; j <= word2.length(); j++) {
+            prev[j] = j;
+        }
+        for (int i = 1; i <= word1.length(); i++) {
+            int[] curr = new int[word2.length() + 1];
+            curr[0] = i;
+            for (int j = 1; j <= word2.length(); j++) {
+                if (word1.charAt(i - 1) == word2.charAt(j - 1)) {
+                    curr[j] = 0 + prev[j - 1];
+                } else {
+                    var replaced = 1 + prev[j - 1];
+                    var deleted = 1 + prev[j];
+                    var added = 1 + curr[j - 1];
+                    curr[j] = Math.min(replaced, Math.min(deleted, added));
+                }
+            }
+            prev = curr;
+        }
+
+        return prev[word2.length()];
     }
 
     public int bottomUp(String word1, String word2) {
