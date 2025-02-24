@@ -14,22 +14,26 @@
  * }
  */
 class Solution {
-    private int maxi = Integer.MIN_VALUE;
+    int maxx = Integer.MIN_VALUE / 2;
 
     public int maxPathSum(TreeNode root) {
-        var x = mps(root);
-        System.out.println(x);
-        return maxi;
+        var x = rec(root);
+        return maxx;
     }
 
-    public int mps(TreeNode root) {
+    public int rec(TreeNode root) {
         if (root == null) {
             return 0;
         }
-        int lh = Math.max(0,mps(root.left));
-        int rh = Math.max(0,mps(root.right));
-        int localMax = lh + rh + root.val;
-        maxi = Math.max(localMax, maxi);
-        return Math.max(lh, rh) + root.val;
+        var lh = rec(root.left);
+        if (lh < 0)
+            lh = 0;
+        var rh = rec(root.right);
+        if (rh < 0)
+            rh = 0;
+        if (maxx < root.val + lh + rh) {
+            maxx = root.val + lh + rh;
+        }
+        return root.val + Math.max(lh, rh);
     }
 }
