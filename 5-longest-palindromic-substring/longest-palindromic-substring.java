@@ -4,7 +4,41 @@ class Solution {
         var lcSubSeq = longestCommonSubsequence(s, t);
         System.out.println(lcSubSeq);
         var lcSubStr = longestCommonSubstring(s, t);
-        return lcSubStr;
+        System.out.println(lcSubStr);
+        var lcSubStr2 = longestCommonSubstring2(s);
+        return lcSubStr2;
+    }
+
+    public String longestCommonSubstring2(String s) {
+        var res = "";
+        var resLen = 0;
+        // odd
+        for (int i = 0; i < s.length(); i++) {
+            var l = i;
+            var r = i;
+            while (l >= 0 && r <= s.length() - 1 && s.charAt(l) == s.charAt(r)) {
+                if (r - l + 1 > resLen) {
+                    res = s.substring(l, r+1);
+                    resLen = r - l + 1;
+                }
+                l--;
+                r++;
+            }
+        }
+        // even
+        for (int i = 0; i < s.length(); i++) {
+            var l = i;
+            var r = i + 1;
+            while (l >= 0 && r <= s.length() - 1 && s.charAt(l) == s.charAt(r)) {
+                if (r - l + 1 > resLen) {
+                    res = s.substring(l, r+1);
+                    resLen = r - l + 1;
+                }
+                l--;
+                r++;
+            }
+        }
+        return res;
     }
 
     public String longestCommonSubstring(String s, String t) {
@@ -29,7 +63,7 @@ class Solution {
                 }
             }
         }
-    
+
         int i = itr2 - maxi;
         int j = itr2;
         String ans = s.substring(i, j);
